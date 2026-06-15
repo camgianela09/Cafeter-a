@@ -24,20 +24,18 @@ public class Ctrl_Usuario {
         boolean respuesta = false;
         
         Connection cn = Conexion.getConexion();
-        String sql = "select usuario, password from tb_usuario where usuario = '"+ objeto.getUsuario() +"' and password = '"+objeto.getPassword()+"'";
+        String sql = "select usuario from tb_usuario where usuario = '"+ objeto.getUsuario() +"' and password = '"+objeto.getPassword()+"'";
         Statement st;
         try {
             st = cn.createStatement();
             ResultSet rs = st.executeQuery(sql);
             
             while (rs.next()){
-                respuesta = true; 
-                
-            }
-            
+                respuesta = true;                 
+            }            
         } catch (SQLException e){
             System.out.println("Error al iniciar");
-            JOptionPane.showMessageDialog(null, "Error al iniciar Sesión");
+            throw new SQLException("Error al iniciar Sesión");
         }   
         return respuesta;
     }
