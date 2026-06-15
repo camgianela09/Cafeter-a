@@ -4,7 +4,7 @@
  */
 package Controlador;
 
-import Conexión.Conexión;
+import Conexión.Conexion;
 import java.sql.Connection;
 import Modelo.Usuario;
 import javax.swing.JOptionPane;
@@ -19,11 +19,11 @@ import java.sql.Statement;
 public class Ctrl_Usuario {
     
     //Metodo para iniciar sesión 
-    public boolean loginUser(Usuario objeto){
+    public boolean loginUser(Usuario objeto) throws SQLException{
      
         boolean respuesta = false;
         
-        Connection cn = Conexión.conectar();
+        Connection cn = Conexion.getConexion();
         String sql = "select usuario, password from tb_usuario where usuario = '"+ objeto.getUsuario() +"' and password = '"+objeto.getPassword()+"'";
         Statement st;
         try {
