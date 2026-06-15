@@ -7,7 +7,6 @@ package Controlador;
 import Conexión.Conexion;
 import java.sql.Connection;
 import Modelo.Usuario;
-import javax.swing.JOptionPane;
 import java.sql.SQLException;
 import java.sql.ResultSet;
 import java.sql.Statement;

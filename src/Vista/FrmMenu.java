@@ -4,12 +4,16 @@
  */
 package Vista;
 
+import Controlador.Ctrl_Cliente;
+import Modelo.Cliente;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author AMIRA
  */
 public class FrmMenu extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmMenu.class.getName());
 
     /**
@@ -18,6 +22,8 @@ public class FrmMenu extends javax.swing.JFrame {
     public FrmMenu() {
         initComponents();
     }
+
+    private FrmCliente frmCliente;
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -31,12 +37,12 @@ public class FrmMenu extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
-        jMenuItem2 = new javax.swing.JMenuItem();
-        jMenuItem3 = new javax.swing.JMenuItem();
+        mOperaciones = new javax.swing.JMenu();
+        smCategoria = new javax.swing.JMenuItem();
+        smProducto = new javax.swing.JMenuItem();
         jSeparator1 = new javax.swing.JPopupMenu.Separator();
-        jMenuItem4 = new javax.swing.JMenuItem();
-        jMenuItem5 = new javax.swing.JMenuItem();
+        smCliente = new javax.swing.JMenuItem();
+        smUsuario = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -48,23 +54,25 @@ public class FrmMenu extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu1);
 
-        jMenu2.setText("OPERACIONES");
+        mOperaciones.setText("OPERACIONES");
+        mOperaciones.addActionListener(this::mOperacionesActionPerformed);
 
-        jMenuItem2.setText("Categoria");
-        jMenu2.add(jMenuItem2);
+        smCategoria.setText("Categoria");
+        mOperaciones.add(smCategoria);
 
-        jMenuItem3.setText("Productos");
-        jMenuItem3.addActionListener(this::jMenuItem3ActionPerformed);
-        jMenu2.add(jMenuItem3);
-        jMenu2.add(jSeparator1);
+        smProducto.setText("Productos");
+        smProducto.addActionListener(this::smProductoActionPerformed);
+        mOperaciones.add(smProducto);
+        mOperaciones.add(jSeparator1);
 
-        jMenuItem4.setText("Clientes");
-        jMenu2.add(jMenuItem4);
+        smCliente.setText("Clientes");
+        smCliente.addActionListener(this::smClienteActionPerformed);
+        mOperaciones.add(smCliente);
 
-        jMenuItem5.setText("Usuarios");
-        jMenu2.add(jMenuItem5);
+        smUsuario.setText("Usuarios");
+        mOperaciones.add(smUsuario);
 
-        jMenuBar1.add(jMenu2);
+        jMenuBar1.add(mOperaciones);
 
         jMenu3.setText("REPORTES");
         jMenuBar1.add(jMenu3);
@@ -85,9 +93,22 @@ public class FrmMenu extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+    private void smProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_smProductoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuItem3ActionPerformed
+    }//GEN-LAST:event_smProductoActionPerformed
+
+    private void mOperacionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mOperacionesActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_mOperacionesActionPerformed
+
+    private void smClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_smClienteActionPerformed
+        // TODO add your handling code here:
+        if (frmCliente == null) {
+            frmCliente = new FrmCliente();
+        }
+
+        frmCliente.setVisible(true);
+    }//GEN-LAST:event_smClienteActionPerformed
 
     /**
      * @param args the command line arguments
@@ -116,14 +137,14 @@ public class FrmMenu extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JMenuItem jMenuItem2;
-    private javax.swing.JMenuItem jMenuItem3;
-    private javax.swing.JMenuItem jMenuItem4;
-    private javax.swing.JMenuItem jMenuItem5;
     private javax.swing.JPopupMenu.Separator jSeparator1;
+    private javax.swing.JMenu mOperaciones;
+    private javax.swing.JMenuItem smCategoria;
+    private javax.swing.JMenuItem smCliente;
+    private javax.swing.JMenuItem smProducto;
+    private javax.swing.JMenuItem smUsuario;
     // End of variables declaration//GEN-END:variables
 }
