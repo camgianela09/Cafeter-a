@@ -24,6 +24,7 @@ public class FrmMenu extends javax.swing.JFrame {
     }
 
     private FrmCliente frmCliente;
+    private FrmCategoria frmCategoria;
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -58,6 +59,7 @@ public class FrmMenu extends javax.swing.JFrame {
         mOperaciones.addActionListener(this::mOperacionesActionPerformed);
 
         smCategoria.setText("Categoria");
+        smCategoria.addActionListener(this::smCategoriaActionPerformed);
         mOperaciones.add(smCategoria);
 
         smProducto.setText("Productos");
@@ -109,6 +111,15 @@ public class FrmMenu extends javax.swing.JFrame {
 
         frmCliente.setVisible(true);
     }//GEN-LAST:event_smClienteActionPerformed
+
+    private void smCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_smCategoriaActionPerformed
+        // TODO add your handling code here:
+        if (frmCategoria == null) {
+            frmCategoria = new FrmCategoria();
+        }
+
+        frmCategoria.setVisible(true);
+    }//GEN-LAST:event_smCategoriaActionPerformed
 
     /**
      * @param args the command line arguments

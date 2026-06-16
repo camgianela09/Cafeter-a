@@ -170,4 +170,23 @@ public class Ctrl_Categoria {
             }
         }
     }
+    
+    // Anular
+    public boolean anular(Categoria cat) throws SQLException {
+
+        String sql = """
+                     UPDATE tb_categoria
+                     SET estado = ?
+                     WHERE idCategoria = ?
+                     """;
+        try (
+                Connection cn = Conexion.getConexion(); 
+                PreparedStatement ps = cn.prepareStatement(sql)) {
+
+            ps.setInt(1, cat.getEstado());
+            ps.setInt(2, cat.getIdCategoria());
+
+            return ps.executeUpdate() > 0;
+        }
+    }
 }

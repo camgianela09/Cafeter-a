@@ -166,7 +166,6 @@ public class Ctrl_Cliente {
     }
     
     // Anular
-    // ACTUALIZAR
     public boolean anular(Cliente cliente) throws SQLException {
 
         String sql = """

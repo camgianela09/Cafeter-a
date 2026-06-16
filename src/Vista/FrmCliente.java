@@ -325,11 +325,17 @@ public class FrmCliente extends javax.swing.JFrame {
 
             // Si codigo es CERO, entonces insertar nuevo registro, caso contrario actualizar
             if (codigo == 0) {
+                // Verifica duplicado
+                var rpta = control.existeDni(client.getDni());
+                if (rpta) {
+                    JOptionPane.showMessageDialog(this, "Dni duplicado, ya existe en la BD");
+                    return;
+                }
+
                 // 4. Usar la funcion guardar del objeto controlador cliente
                 var respuesta = control.guardar(client);
                 // 5. Si todo es correcto, limpiar las cajas de texto, volver a llamar la funcion listar y mostrar un mensaje de datos grabados correctamente
                 if (respuesta) {
-                    control.listar(txtBuscar.getText().trim());
                     txtNombre.setText("");
                     txtApellido.setText("");
                     txtDni.setText("");
@@ -346,7 +352,6 @@ public class FrmCliente extends javax.swing.JFrame {
                 var respuesta = control.actualizar(client);
                 // 5. Si todo es correcto, limpiar las cajas de texto, volver a llamar la funcion listar y mostrar un mensaje de datos grabados correctamente
                 if (respuesta) {
-                    control.listar(txtBuscar.getText().trim());
                     txtNombre.setText("");
                     txtApellido.setText("");
                     txtDni.setText("");
