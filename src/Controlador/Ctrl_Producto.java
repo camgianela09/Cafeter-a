@@ -5,7 +5,8 @@
 package Controlador;
 
 import Conexión.Conexion;
-import Modelo.Cliente;
+import Modelo.Categoria;
+import Modelo.Producto;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,22 +18,22 @@ import java.util.List;
  *
  * @author AMIRA
  */
-public class Ctrl_Cliente {
-
+public class Ctrl_Producto {
     // Funcion devuelve una lista de clientes, recibe un parametro (criterio) para buscar
-    public List<Cliente> listar(String criterio) throws SQLException {
+    public List<Producto> listar(String criterio) throws SQLException {
 
         // Crear una lisra de clientes vacio
-        List<Cliente> lista = new ArrayList<>();
+        List<Producto> lista = new ArrayList<>();
 
         // crea la variable sql
         String sql = """
                  SELECT *
-                 FROM tb_cliente
+                 FROM tb_producto
                  WHERE nombre LIKE ?
-                    OR apellido LIKE ?
-                    OR dni LIKE ?
-                 ORDER BY apellido, nombre
+                    OR cantidad LIKE ?
+                    OR precio LIKE ?
+                    OR descripcion LIKE ?
+                 ORDER BY nombre
                  """;
 // Seleccionar todos los campos desde la tabla (tb_cliente) donde nombre debe coincidir con algun caratacter del parametro
 // o apellido debe coincidir con algun caratacter del parametro o dni debe coincidir con algun caratacter del parametro
@@ -51,6 +52,7 @@ public class Ctrl_Cliente {
             ps.setString(1, busqueda);
             ps.setString(2, busqueda);
             ps.setString(3, busqueda);
+            ps.setString(4, busqueda);
 
             // Ejecuta el preparestatement y asigna el valor del rs
             try (ResultSet rs = ps.executeQuery()) {
@@ -58,19 +60,23 @@ public class Ctrl_Cliente {
                 // Mientras, el rs pueda avanzar
                 while (rs.next()) {
                     // Crea un objeto (cliente) de la clase cliente
-                    Cliente client = new Cliente();
-
+                    Producto pro = new Producto();
+                    Categoria cat = new Categoria();
+                    
                     // Asigna datos a sus atribitos al objeto cliente
-                    client.setIdCliente(rs.getInt("idCliente"));
-                    client.setNombre(rs.getString("nombre"));
-                    client.setApellido(rs.getString("apellido"));
-                    client.setDni(rs.getString("dni"));
-                    client.setTelefono(rs.getString("telefono"));
-                    client.setDireccion(rs.getString("direccion"));
-                    client.setEstado(rs.getInt("estado"));
+                    pro.setIdProducto(rs.getInt("idProducto"));
+                    pro.setNombre(rs.getString("nombre"));
+                    pro.setCantidad(rs.getInt("cantidad"));
+                    pro.setPrecio(rs.getDouble("precio"));
+                    pro.setDescripcion(rs.getString("descripcion"));
+                    pro.setEstado(rs.getInt("estado"));
+                    
+                    cat.setIdCategoria(rs.getInt("idCategoria"));
+                    cat.setDescripcion(rs.getString("descripcion"));
+                    pro.setCategoria(cat);
 
                     // Agrega el objeto cliente a la lista de tipo cliente
-                    lista.add(client);
+                    lista.add(pro);
                 }
             }
         }
@@ -79,10 +85,10 @@ public class Ctrl_Cliente {
     }
 
     // INSERTAR
-    public boolean guardar(Cliente cliente) throws SQLException {
+    public boolean guardar(Producto pro) throws SQLException {
 
         String sql = """
-                     INSERT INTO tb_cliente
+                     INSERT INTO tb_producto
                      (nombre, apellido, dni, telefono, direccion, estado)
                      VALUES (?, ?, ?, ?, ?, ?)
                      """;
@@ -91,19 +97,19 @@ public class Ctrl_Cliente {
         try (
                 Connection cn = Conexion.getConexion(); 
                 PreparedStatement ps = cn.prepareStatement(sql)) {
-
-            ps.setString(1, cliente.getNombre());
-            ps.setString(2, cliente.getApellido());
-            ps.setString(3, cliente.getDni());
-            ps.setString(4, cliente.getTelefono());
-            ps.setString(5, cliente.getDireccion());
-            ps.setInt(6, cliente.getEstado());
-
+/*
+            ps.setString(1, pro.getNombre());
+            ps.setString(2, pro.getApellido());
+            ps.setString(3, pro.getDni());
+            ps.setString(4, pro.getTelefono());
+            ps.setString(5, pro.getDireccion());
+            ps.setInt(6, pro.getEstado());
+*/
             // Ejejcuta el ps, siempre devuelve un valor
             return ps.executeUpdate() > 0;
         }
     }
-
+/*
     // BUSCAR POR ID
     public Cliente buscarPorId(int idCliente) throws SQLException {
 
@@ -164,27 +170,7 @@ public class Ctrl_Cliente {
             return ps.executeUpdate() > 0;
         }
     }
-    
-    // Anular
-    // ACTUALIZAR
-    public boolean anular(Cliente cliente) throws SQLException {
-
-        String sql = """
-                     UPDATE tb_cliente
-                     SET estado = ?
-                     WHERE idCliente = ?
-                     """;
-        try (
-                Connection cn = Conexion.getConexion(); 
-                PreparedStatement ps = cn.prepareStatement(sql)) {
-
-            ps.setInt(1, cliente.getEstado());
-            ps.setInt(2, cliente.getIdCliente());
-
-            return ps.executeUpdate() > 0;
-        }
-    }
-
+*/
     // ELIMINAR
     public boolean eliminar(int idCliente) throws SQLException {
 
