@@ -19,6 +19,7 @@ import java.util.List;
  * @author AMIRA
  */
 public class Ctrl_Producto {
+
     // Funcion devuelve una lista de clientes, recibe un parametro (criterio) para buscar
     public List<Producto> listar(String criterio) throws SQLException {
 
@@ -41,9 +42,8 @@ public class Ctrl_Producto {
 
         try (
                 // Conecta la DB
-                Connection cn = Conexion.getConexion(); 
-                // Prepara la consulta (select) o sentencias (insertar, actualizar, eliminar), asociado a la conexion
-                PreparedStatement ps = cn.prepareStatement(sql)) {
+                Connection cn = Conexion.getConexion(); // Prepara la consulta (select) o sentencias (insertar, actualizar, eliminar), asociado a la conexion
+                 PreparedStatement ps = cn.prepareStatement(sql)) {
 
             // el % es un comodin que representa cualquier caracter
             String busqueda = "%" + criterio + "%";
@@ -59,23 +59,23 @@ public class Ctrl_Producto {
 
                 // Mientras, el rs pueda avanzar
                 while (rs.next()) {
-                    // Crea un objeto (cliente) de la clase cliente
+                    // Crea un objeto (pro) de la clase pro
                     Producto pro = new Producto();
                     Categoria cat = new Categoria();
-                    
-                    // Asigna datos a sus atribitos al objeto cliente
+
+                    // Asigna datos a sus atribitos al objeto pro
                     pro.setIdProducto(rs.getInt("idProducto"));
                     pro.setNombre(rs.getString("nombre"));
                     pro.setCantidad(rs.getInt("cantidad"));
                     pro.setPrecio(rs.getDouble("precio"));
                     pro.setDescripcion(rs.getString("descripcion"));
                     pro.setEstado(rs.getInt("estado"));
-                    
+
                     cat.setIdCategoria(rs.getInt("idCategoria"));
                     cat.setDescripcion(rs.getString("descripcion"));
                     pro.setCategoria(cat);
 
-                    // Agrega el objeto cliente a la lista de tipo cliente
+                    // Agrega el objeto pro a la lista de tipo pro
                     lista.add(pro);
                 }
             }
@@ -89,52 +89,55 @@ public class Ctrl_Producto {
 
         String sql = """
                      INSERT INTO tb_producto
-                     (nombre, apellido, dni, telefono, direccion, estado)
+                     (nombre, cantidad, precio, descripcion, idCategoria, estado)
                      VALUES (?, ?, ?, ?, ?, ?)
                      """;
         // Insertar dentro de la tabla () los campos (nombre, apellido, dni, telefono, direccion, estado) con los valores ("", "", etc)
 
         try (
-                Connection cn = Conexion.getConexion(); 
-                PreparedStatement ps = cn.prepareStatement(sql)) {
-/*
+                Connection cn = Conexion.getConexion(); PreparedStatement ps = cn.prepareStatement(sql)) {
+
             ps.setString(1, pro.getNombre());
-            ps.setString(2, pro.getApellido());
-            ps.setString(3, pro.getDni());
-            ps.setString(4, pro.getTelefono());
-            ps.setString(5, pro.getDireccion());
+            ps.setInt(2, pro.getCantidad());
+            ps.setDouble(3, pro.getPrecio());
+            ps.setString(4, pro.getDescripcion());
+            ps.setInt(5, pro.getCategoria().getIdCategoria());
             ps.setInt(6, pro.getEstado());
-*/
+
             // Ejejcuta el ps, siempre devuelve un valor
             return ps.executeUpdate() > 0;
         }
     }
-/*
-    // BUSCAR POR ID
-    public Cliente buscarPorId(int idCliente) throws SQLException {
 
-        String sql = "SELECT * FROM tb_cliente WHERE idCliente = ?";
+    // BUSCAR POR ID
+    public Producto buscarPorId(int idProducto) throws SQLException {
+
+        String sql = "SELECT * FROM tb_producto WHERE idProducto = ?";
 
         try (
                 Connection cn = Conexion.getConexion(); PreparedStatement ps = cn.prepareStatement(sql)) {
 
-            ps.setInt(1, idCliente);
+            ps.setInt(1, idProducto);
 
             try (ResultSet rs = ps.executeQuery()) {
 
                 if (rs.next()) {
 
-                    Cliente cliente = new Cliente();
+                    Producto pro = new Producto();
 
-                    cliente.setIdCliente(rs.getInt("idCliente"));
-                    cliente.setNombre(rs.getString("nombre"));
-                    cliente.setApellido(rs.getString("apellido"));
-                    cliente.setDni(rs.getString("dni"));
-                    cliente.setTelefono(rs.getString("telefono"));
-                    cliente.setDireccion(rs.getString("direccion"));
-                    cliente.setEstado(rs.getInt("estado"));
+                    pro.setIdProducto(rs.getInt("idProducto"));
+                    pro.setNombre(rs.getString("nombre"));
+                    pro.setCantidad(rs.getInt("cantidad"));
+                    pro.setPrecio(rs.getDouble("precio"));
+                    pro.setDescripcion(rs.getString("descripcion"));
+                    
+                    Categoria cat = new Categoria();
+                    cat.setIdCategoria(rs.getInt("idCategoria"));
+                    pro.setCategoria(cat);
+                    
+                    pro.setEstado(rs.getInt("estado"));
 
-                    return cliente;
+                    return pro;
                 }
             }
         }
@@ -143,54 +146,56 @@ public class Ctrl_Producto {
     }
 
     // ACTUALIZAR
-    public boolean actualizar(Cliente cliente) throws SQLException {
+    public boolean actualizar(Producto pro) throws SQLException {
 
         String sql = """
-                     UPDATE tb_cliente
+                     UPDATE tb_producto
                      SET nombre = ?,
-                         apellido = ?,
-                         dni = ?,
-                         telefono = ?,
-                         direccion = ?,
+                         cantidad = ?,
+                         precio = ?,
+                         descripcion = ?,
+                         idCategoria = ?,
                          estado = ?
-                     WHERE idCliente = ?
+                     WHERE idProducto = ?
                      """;
 
         try (
                 Connection cn = Conexion.getConexion(); PreparedStatement ps = cn.prepareStatement(sql)) {
 
-            ps.setString(1, cliente.getNombre());
-            ps.setString(2, cliente.getApellido());
-            ps.setString(3, cliente.getDni());
-            ps.setString(4, cliente.getTelefono());
-            ps.setString(5, cliente.getDireccion());
-            ps.setInt(6, cliente.getEstado());
-            ps.setInt(7, cliente.getIdCliente());
+            ps.setString(1, pro.getNombre());
+            ps.setInt(2, pro.getCantidad());
+            ps.setDouble(3, pro.getPrecio());
+            ps.setString(4, pro.getDescripcion());
+            ps.setInt(5, pro.getCategoria().getIdCategoria());
+            ps.setInt(6, pro.getEstado());
+            ps.setInt(7, pro.getIdProducto());
 
             return ps.executeUpdate() > 0;
         }
     }
-*/
+
+    
     // ELIMINAR
-    public boolean eliminar(int idCliente) throws SQLException {
+    public boolean eliminar(int idProducto) throws SQLException {
 
-        String sql = "DELETE FROM tb_cliente WHERE idCliente = ?";
+        String sql = "DELETE FROM tb_producto WHERE idProducto = ?";
 
         try (
                 Connection cn = Conexion.getConexion(); PreparedStatement ps = cn.prepareStatement(sql)) {
-            ps.setInt(1, idCliente);
+            ps.setInt(1, idProducto);
             return ps.executeUpdate() > 0;
         }
     }
 
-    // VALIDAR DNI REPETIDO
-    public boolean existeDni(String dni) throws SQLException {
+    // VALIDAR CATEGORIA REPETIDO
+    public boolean existeIdCategoria(int idCategoria, String descripcion) throws SQLException {
 
-        String sql = "SELECT dni FROM tb_cliente WHERE dni = ?";
+        String sql = "SELECT idCategoria FROM tb_producto WHERE idCategoria = ? and descripcion = ?";
 
         try (
                 Connection cn = Conexion.getConexion(); PreparedStatement ps = cn.prepareStatement(sql)) {
-            ps.setString(1, dni);
+            ps.setInt(1, idCategoria);
+            ps.setString(2, descripcion);
 
             try (ResultSet rs = ps.executeQuery()) {
                 return rs.next();
