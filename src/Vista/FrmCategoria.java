@@ -319,7 +319,7 @@ public class FrmCategoria extends javax.swing.JFrame {
         int fila = tbLista.getSelectedRow();
 
         if (fila == -1) {
-            JOptionPane.showMessageDialog(this, "Seleccione un cliente");
+            JOptionPane.showMessageDialog(this, "Seleccione una descripcion");
             return;
         }
 
@@ -342,7 +342,7 @@ public class FrmCategoria extends javax.swing.JFrame {
         int fila = tbLista.getSelectedRow();
 
         if (fila == -1) {
-            JOptionPane.showMessageDialog(this, "Seleccione un cliente");
+            JOptionPane.showMessageDialog(this, "Seleccione una descripcion");
             return;
         }
 
