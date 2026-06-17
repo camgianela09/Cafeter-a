@@ -318,6 +318,12 @@ public class FrmUsuario extends javax.swing.JFrame {
         txtPassword.setText(tbLista.getValueAt(fila, 4).toString());
         txtTelefono.setText(tbLista.getValueAt(fila, 5).toString());
 
+        if ((Integer) tbLista.getValueAt(fila, 6) == 0) {
+            chkEstado.setSelected(false);
+        } else {
+            chkEstado.setSelected(true);
+        }
+        
         // Habilitar el panel
         habilitarPanel(true);
     }//GEN-LAST:event_btEditarActionPerformed

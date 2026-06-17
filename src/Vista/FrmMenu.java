@@ -26,6 +26,7 @@ public class FrmMenu extends javax.swing.JFrame {
     private FrmCliente frmCliente;
     private FrmCategoria frmCategoria;
     private FrmUsuario frmUsuario;
+    private FrmProducto frmProducto;
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -99,6 +100,11 @@ public class FrmMenu extends javax.swing.JFrame {
 
     private void smProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_smProductoActionPerformed
         // TODO add your handling code here:
+        if (frmProducto == null) {
+            frmProducto = new FrmProducto();
+        }
+
+        frmProducto.setVisible(true);
     }//GEN-LAST:event_smProductoActionPerformed
 
     private void mOperacionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mOperacionesActionPerformed
