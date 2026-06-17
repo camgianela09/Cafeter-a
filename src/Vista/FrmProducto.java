@@ -73,7 +73,7 @@ public class FrmProducto extends javax.swing.JFrame {
             cbCategoria.removeAllItems();
 
             for (Categoria c : control.listar("")) {
-                //cbCategoria.addItem(c);
+                cbCategoria.addItem(c);
             }
 
         } catch (SQLException e) {
@@ -179,7 +179,7 @@ public class FrmProducto extends javax.swing.JFrame {
 
         jLabel6.setText("Categoria");
 
-        cbCategoria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbCategoria.setToolTipText("");
 
         javax.swing.GroupLayout panelPrincipalLayout = new javax.swing.GroupLayout(panelPrincipal);
         panelPrincipal.setLayout(panelPrincipalLayout);
@@ -538,7 +538,7 @@ public class FrmProducto extends javax.swing.JFrame {
     private javax.swing.JButton btEditar;
     private javax.swing.JButton btGuardar;
     private javax.swing.JButton btNuevo;
-    private javax.swing.JComboBox<String> cbCategoria;
+    private javax.swing.JComboBox<Categoria> cbCategoria;
     private javax.swing.JCheckBox chkEstado;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
