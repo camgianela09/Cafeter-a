@@ -5,7 +5,6 @@
 package Controlador;
 
 import Conexión.Conexion;
-import Modelo.Cliente;
 import java.sql.Connection;
 import Modelo.Usuario;
 import java.sql.PreparedStatement;
@@ -151,21 +150,48 @@ public class Ctrl_Usuario {
         }
     }
     
-    public boolean anular(Cliente cliente) throws SQLException {
+    public boolean anular(Usuario user) throws SQLException {
 
         String sql = """
-                     UPDATE tb_cliente
+                     UPDATE tb_usuario
                      SET estado = ?
-                     WHERE idCliente = ?
+                     WHERE idUsuario = ?
                      """;
         try (
                 Connection cn = Conexion.getConexion(); 
                 PreparedStatement ps = cn.prepareStatement(sql)) {
 
-            ps.setInt(1, cliente.getEstado());
-            ps.setInt(2, cliente.getIdCliente());
+            ps.setInt(1, user.getEstado());
+            ps.setInt(2, user.getIdUsuario());
 
             return ps.executeUpdate() > 0;
+        }
+    }
+    
+    // ELIMINAR
+    public boolean eliminar(int idUsuario) throws SQLException {
+
+        String sql = "DELETE FROM tb_usuario WHERE idUsuario = ?";
+
+        try (
+                Connection cn = Conexion.getConexion(); PreparedStatement ps = cn.prepareStatement(sql)) {
+            ps.setInt(1, idUsuario);
+            return ps.executeUpdate() > 0;
+        }
+    }
+
+    // VALIDAR DNI REPETIDO
+    public boolean existeUsuario(String usuario) throws SQLException {
+
+        String sql = "SELECT usuario FROM tb_usuario WHERE usuario = ?";
+
+        try (
+                Connection cn = Conexion.getConexion(); PreparedStatement ps = cn.prepareStatement(sql)) {
+            ps.setString(1, usuario);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next();
+            }
         }
     }
     

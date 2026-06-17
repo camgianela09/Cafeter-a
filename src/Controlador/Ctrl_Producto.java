@@ -28,12 +28,13 @@ public class Ctrl_Producto {
 
         // crea la variable sql
         String sql = """
-                 SELECT *
-                 FROM tb_producto
+                 SELECT idproducto, nombre, cantidad, precio, tb_producto.descripcion, tb_producto.idcategoria, 
+                 tb_producto.estado, tb_categoria.descripcion as categoria
+                 FROM tb_producto inner join tb_categoria ON tb_producto.idcategoria = tb_categoria.idcategoria
                  WHERE nombre LIKE ?
                     OR cantidad LIKE ?
                     OR precio LIKE ?
-                    OR descripcion LIKE ?
+                    OR tb_producto.descripcion LIKE ?
                  ORDER BY nombre
                  """;
 // Seleccionar todos los campos desde la tabla (tb_cliente) donde nombre debe coincidir con algun caratacter del parametro
@@ -69,10 +70,10 @@ public class Ctrl_Producto {
                     pro.setCantidad(rs.getInt("cantidad"));
                     pro.setPrecio(rs.getDouble("precio"));
                     pro.setDescripcion(rs.getString("descripcion"));
-                    pro.setEstado(rs.getInt("estado"));
+                    pro.setEstado(rs.getInt("estado"));                    
 
                     cat.setIdCategoria(rs.getInt("idCategoria"));
-                    cat.setDescripcion(rs.getString("descripcion"));
+                    cat.setDescripcion(rs.getString("categoria"));
                     pro.setCategoria(cat);
 
                     // Agrega el objeto pro a la lista de tipo pro
@@ -130,11 +131,11 @@ public class Ctrl_Producto {
                     pro.setCantidad(rs.getInt("cantidad"));
                     pro.setPrecio(rs.getDouble("precio"));
                     pro.setDescripcion(rs.getString("descripcion"));
-                    
+
                     Categoria cat = new Categoria();
                     cat.setIdCategoria(rs.getInt("idCategoria"));
                     pro.setCategoria(cat);
-                    
+
                     pro.setEstado(rs.getInt("estado"));
 
                     return pro;
@@ -174,7 +175,6 @@ public class Ctrl_Producto {
         }
     }
 
-    
     // ELIMINAR
     public boolean eliminar(int idProducto) throws SQLException {
 
@@ -188,18 +188,35 @@ public class Ctrl_Producto {
     }
 
     // VALIDAR CATEGORIA REPETIDO
-    public boolean existeIdCategoria(int idCategoria, String descripcion) throws SQLException {
+    public boolean existeNombreProducto(int idCategoria, String nombre) throws SQLException {
 
-        String sql = "SELECT idCategoria FROM tb_producto WHERE idCategoria = ? and descripcion = ?";
+        String sql = "SELECT idProducto FROM tb_producto WHERE idCategoria = ? and nombre = ?";
 
         try (
                 Connection cn = Conexion.getConexion(); PreparedStatement ps = cn.prepareStatement(sql)) {
             ps.setInt(1, idCategoria);
-            ps.setString(2, descripcion);
+            ps.setString(2, nombre);
 
             try (ResultSet rs = ps.executeQuery()) {
                 return rs.next();
             }
+        }
+    }
+
+    public boolean anular(Producto prod) throws SQLException {
+
+        String sql = """
+                     UPDATE tb_producto
+                     SET estado = ?
+                     WHERE idProducto = ?
+                     """;
+        try (
+                Connection cn = Conexion.getConexion(); PreparedStatement ps = cn.prepareStatement(sql)) {
+
+            ps.setInt(1, prod.getEstado());
+            ps.setInt(2, prod.getIdProducto());
+
+            return ps.executeUpdate() > 0;
         }
     }
 }
