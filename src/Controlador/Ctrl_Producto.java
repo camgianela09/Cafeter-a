@@ -70,7 +70,7 @@ public class Ctrl_Producto {
                     pro.setCantidad(rs.getInt("cantidad"));
                     pro.setPrecio(rs.getDouble("precio"));
                     pro.setDescripcion(rs.getString("descripcion"));
-                    pro.setEstado(rs.getInt("estado"));
+                    pro.setEstado(rs.getInt("estado"));                    
 
                     cat.setIdCategoria(rs.getInt("idCategoria"));
                     cat.setDescripcion(rs.getString("categoria"));

@@ -55,9 +55,10 @@ public class FrmProducto extends javax.swing.JFrame {
                     c.getNombre(),
                     c.getCantidad(),
                     c.getPrecio(),
-                    c.getDescripcion(),
+                    c.getDescripcion(),                    
                     c.getCategoria().getDescripcion(),
-                    c.getEstado()
+                    c.getEstado(),
+                    c.getCategoria().getIdCategoria(),
                 });
             }
 
@@ -140,15 +141,23 @@ public class FrmProducto extends javax.swing.JFrame {
 
         tbLista.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "ID", "NOMBRE", "CANTIDAD", "PRECIO", "DESCRIPCION", "CATEGORIA", "ESTADO"
+                "ID", "NOMBRE", "CANTIDAD", "PRECIO", "DESCRIPCION", "CATEGORIA", "ESTADO", "IDCAT"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                true, true, true, true, true, true, true, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(tbLista);
 
         jLabel7.setText("Estado");
@@ -335,6 +344,9 @@ public class FrmProducto extends javax.swing.JFrame {
             return;
         }
 
+        // Cargar las categoria
+        cargarCategoria();
+
         // Pasamos los datos de la fila seleccionada a los TextField
         codigo = Integer.parseInt(tbLista.getValueAt(fila, 0).toString());
 
@@ -342,11 +354,20 @@ public class FrmProducto extends javax.swing.JFrame {
         txtCantidad.setText(tbLista.getValueAt(fila, 2).toString());
         txtPrecio.setText(tbLista.getValueAt(fila, 3).toString());
         txtDescripcion.setText(tbLista.getValueAt(fila, 4).toString());
-        
+
         if ((Integer) tbLista.getValueAt(fila, 6) == 0) {
             chkEstado.setSelected(false);
         } else {
             chkEstado.setSelected(true);
+        }
+
+        // Seleccionar la categoria segun el producto a editar
+       int idCategoriaProducto = (Integer) tbLista.getValueAt(fila, 7);
+        for (int i = 0; i < cbCategoria.getItemCount(); i++) {
+            if (cbCategoria.getItemAt(i).getIdCategoria() == idCategoriaProducto) {
+                cbCategoria.setSelectedIndex(i);
+                break;
+            }
         }
 
         // Habilitar el panel
@@ -409,17 +430,21 @@ public class FrmProducto extends javax.swing.JFrame {
         }
 
         // 2. Crear el objeto cliente y asignar valores a sus metodos desde las cajas de texto
-        Producto client = new Producto();
-        client.setNombre(txtNombre.getText().trim());
-        client.setCantidad(Integer.parseInt(txtCantidad.getText().trim()));
-        client.setPrecio(Double.parseDouble(txtPrecio.getText().trim()));
-        client.setDescripcion(txtDescripcion.getText().trim());
+        Producto prod = new Producto();
+        prod.setNombre(txtNombre.getText().trim());
+        prod.setCantidad(Integer.parseInt(txtCantidad.getText().trim()));
+        prod.setPrecio(Double.parseDouble(txtPrecio.getText().trim()));
+        prod.setDescripcion(txtDescripcion.getText().trim());
         if (chkEstado.isSelected()) {
-            client.setEstado(1);
+            prod.setEstado(1);
         } else {
-            client.setEstado(0);
+            prod.setEstado(0);
         }
-        client.setIdProducto(codigo);
+        prod.setIdProducto(codigo);
+
+        // Asignar el idcategoria desde el item seleccionado en el combobox
+        Categoria cat = (Categoria) cbCategoria.getSelectedItem();
+        prod.setCategoria(cat);
 
         // 3. Cear un objeto del controlador cliente
         try {
@@ -435,7 +460,7 @@ public class FrmProducto extends javax.swing.JFrame {
                 }
 
                 // 4. Usar la funcion guardar del objeto controlador cliente
-                var respuesta = control.guardar(client);
+                var respuesta = control.guardar(prod);
                 // 5. Si todo es correcto, limpiar las cajas de texto, volver a llamar la funcion listar y mostrar un mensaje de datos grabados correctamente
                 if (respuesta) {
                     txtNombre.setText("");
@@ -450,7 +475,7 @@ public class FrmProducto extends javax.swing.JFrame {
                 // Actualizar
                 // Pasar el id del cliente
                 //client.setIdCliente(codigo);
-                var respuesta = control.actualizar(client);
+                var respuesta = control.actualizar(prod);
                 // 5. Si todo es correcto, limpiar las cajas de texto, volver a llamar la funcion listar y mostrar un mensaje de datos grabados correctamente
                 if (respuesta) {
                     txtNombre.setText("");
