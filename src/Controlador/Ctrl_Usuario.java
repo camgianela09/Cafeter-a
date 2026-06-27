@@ -41,6 +41,32 @@ public class Ctrl_Usuario {
         }   
         return respuesta;
     }
+    public Usuario loginUserObj(Usuario objeto) throws SQLException {
+        Connection cn = Conexion.getConexion();
+        String sql = "SELECT * FROM tb_usuario WHERE usuario = ? AND password = ?";
+        try {
+            PreparedStatement ps = cn.prepareStatement(sql);
+            ps.setString(1, objeto.getUsuario());
+            ps.setString(2, objeto.getPassword());
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                Usuario user = new Usuario();
+                user.setIdUsuario(rs.getInt("idUsuario"));
+                user.setNombre(rs.getString("nombre"));
+                user.setApellido(rs.getString("apellido"));
+                user.setUsuario(rs.getString("usuario"));
+                user.setPassword(rs.getString("password"));
+                user.setTelefono(rs.getString("telefono"));
+                user.setEstado(rs.getInt("estado"));
+                return user;
+            }
+            cn.close();
+        } catch (SQLException e) {
+            throw new SQLException("Error al iniciar Sesion");
+        }
+        return null;
+    }
+
     
     public List<Usuario> listar(String criterio) throws SQLException {
 

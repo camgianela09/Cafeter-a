@@ -6,6 +6,7 @@ package Vista;
 
 import Controlador.Ctrl_Cliente;
 import Modelo.Cliente;
+import Modelo.Usuario;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -23,10 +24,18 @@ public class FrmMenu extends javax.swing.JFrame {
         initComponents();
     }
 
+    private Usuario usuarioLogueado;
+
+    public FrmMenu(Usuario usuarioLogueado) {
+        this();
+        this.usuarioLogueado = usuarioLogueado;
+    }
+
     private FrmCliente frmCliente;
     private FrmCategoria frmCategoria;
     private FrmUsuario frmUsuario;
     private FrmProducto frmProducto;
+    private FrmVenta frmVenta;
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -53,6 +62,7 @@ public class FrmMenu extends javax.swing.JFrame {
         jMenu1.setText("VENTAS");
 
         jMenuItem1.setText("Registrar venta");
+        jMenuItem1.addActionListener(this::jMenuItem1ActionPerformed);
         jMenu1.add(jMenuItem1);
 
         jMenuBar1.add(jMenu1);
@@ -137,6 +147,13 @@ public class FrmMenu extends javax.swing.JFrame {
 
         frmUsuario.setVisible(true);
     }//GEN-LAST:event_smUsuarioActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        if (frmVenta == null) {
+            frmVenta = new FrmVenta(usuarioLogueado);
+        }
+        frmVenta.setVisible(true);
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     /**
      * @param args the command line arguments

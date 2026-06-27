@@ -163,9 +163,9 @@ public class FrmLogin extends javax.swing.JFrame {
         Ctrl_Usuario control = new Ctrl_Usuario();
 
         try {
-            if (control.loginUser(usuario)) {
-                // Abrir menú principal
-                FrmMenu menu = new FrmMenu();
+            Usuario userLogueado = control.loginUserObj(usuario);
+            if (userLogueado != null) {
+                FrmMenu menu = new FrmMenu(userLogueado);
                 menu.setVisible(true);
                 this.dispose();
             } else {
